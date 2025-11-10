@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+}
+
+#colorPicker {
+    width: 50px;
+    height: 35px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#brushSize {
+    width: 150px;
+}
+
+#brushSizeValue {
+    min-width: 30px;
+    font-weight: bold;
+    color: #333;
+}
+
+#clearBtn {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#clearBtn:hover {
+    background-color: #c0392b;
+}
+
+#canvas {
+    display: block;
+    border: 2px solid #333;
+    border-radius: 5px;
+    cursor: crosshair;
+    background-color: white;
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+    margin: 0 auto;
+}
