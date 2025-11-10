@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>お絵描きゲーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+        
+        #container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+        
+        #leftPanel {
+            width: 60%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 10px;
+        }
+        
+        #rightPanel {
+            width: 40%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #canvasContainer {
+            flex: 1;
+            position: relative;
+            background: white;
+            border: 2px solid #333;
+            margin-bottom: 10px;
+        }
+        
+        #drawCanvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        
+        #toolsPanel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+        }
+        
+        .colorBtn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .colorBtn:active, .colorBtn.active {
+            transform: scale(0.9);
+            border: 3px solid #000;
+        }
+        
+        .toolBtn {
+            padding: 8px 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .toolBtn:active {
+            transform: scale(0.95);
+        }
+        
+        .toolBtn.eraser {
+            background: #f44336;
+        }
+        
+        .toolBtn.undo {
+            background: #FF9800;
+        }
+        
+        .toolBtn.download {
+            background: #2196F3;
+        }
+        
+        .sizeBtn {
+            background: #9C27B0;
+        }
+        
+        #roulettePanel {
+            height: 50%;
+            padding: 10px;
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #rouletteDisplay {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow-y: auto;
+        }
+        
+        #rouletteBtn {
+            padding: 15px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        #stopwatchPanel {
+            height: 50%;
+            padding: 10px;
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #stopwatchDisplay {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            background: white;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        #stopwatchControls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        
+        .swBtn {
+            padding: 10px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .swBtn:active {
+            transform: scale(0.95);
+        }
+        
+        .swBtn.adjust {
+            background: #00BCD4;
+        }
+        
+        h3 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        @media (orientation: portrait) {
+            body::before {
+                content: "横向きでご利用ください";
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 24px;
+                font-weight: bold;
+                z-index: 1000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="leftPanel">
+            <div id="canvasContainer">
+                <canvas id="drawCanvas"></canvas>
+            </div>
+            <div id="toolsPanel">
+                <button class="colorBtn" style="background-color: #000000;" data-color="#000000"></button>
+                <button class="colorBtn" style="background-color: #FF0000;" data-color="#FF0000"></button>
+                <button class="colorBtn" style="background-color: #00FF00;" data-color="#00FF00"></button>
+                <button class="colorBtn" style="background-color: #0000FF;" data-color="#0000FF"></button>
+                <button class="colorBtn" style="background-color: #FFFF00;" data-color="#FFFF00"></button>
+                <button class="colorBtn" style="background-color: #FF00FF;" data-color="#FF00FF"></button>
+                <button class="colorBtn" style="background-color: #00FFFF;" data-color="#00FFFF"></button>
+                <button class="colorBtn" style="background-color: #FFA500;" data-color="#FFA500"></button>
+                <button class="colorBtn" style="background-color: #800080;" data-color="#800080"></button>
+                <button class="colorBtn" style="background-color: #A52A2A;" data-color="#A52A2A"></button>
+                <button class="toolBtn sizeBtn" onclick="setPenSize(5)">細</button>
+                <button class="toolBtn sizeBtn" onclick="setPenSize(10)">中</button>
+                <button class="toolBtn sizeBtn" onclick="setPenSize(20)">太</button>
+                <button class="toolBtn eraser" onclick="setEraser()">消しゴム</button>
+                <button class="toolBtn undo" onclick="undo()">UNDO</button>
+                <button class="toolBtn undo" onclick="redo()">REDO</button>
+                <button class="toolBtn eraser" onclick="clearCanvas()">CLEAR</button>
+                <button class="toolBtn download" onclick="downloadImage()">ダウンロード</button>
+            </div>
+        </div>
+        
+        <div id="rightPanel">
+            <div id="roulettePanel">
+                <h3>ルーレット</h3>
+                <div id="rouletteDisplay">？？？</div>
+                <button id="rouletteBtn" onclick="startRoulette()">スタート</button>
+            </div>
+            
+            <div id="stopwatchPanel">
+                <h3>ストップウォッチ</h3>
+                <div id="stopwatchDisplay">00:00</div>
+                <div id="stopwatchControls">
+                    <button class="swBtn" onclick="startStopwatch()">スタート</button>
+                    <button class="swBtn" onclick="stopStopwatch()">ストップ</button>
+                    <button class="swBtn" onclick="resetStopwatch()">リセット</button>
+                    <button class="swBtn adjust" onclick="adjustTime(60)">+1分</button>
+                    <button class="swBtn adjust" onclick="adjustTime(-60)">-1分</button>
+                    <button class="swBtn adjust" onclick="adjustTime(1)">+1秒</button>
+                    <button class="swBtn adjust" onclick="adjustTime(-1)">-1秒</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvasContainer');
+        
+        let currentColor = '#000000';
+        let currentSize = 10;
+        let isDrawing = false;
+        let isEraser = false;
+        let history = [];
+        let historyStep = -1;
+        
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width - 4;
+            canvas.height = rect.height - 4;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Drawing functions
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getPosition(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const pos = getPosition(e);
+            
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = currentSize;
+            
+            if (isEraser) {
+                ctx.globalCompositeOperation = 'destination-out';
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+            }
+            
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+        
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                saveState();
+            }
+        }
+        
+        function getPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches ? e.touches[0] : e;
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+        }
+        
+        // Event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+        
+        // Color selection
+        document.querySelectorAll('.colorBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentColor = this.dataset.color;
+                isEraser = false;
+                document.querySelectorAll('.colorBtn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        function setPenSize(size) {
+            currentSize = size;
+        }
+        
+        function setEraser() {
+            isEraser = true;
+            currentSize = 20;
+            document.querySelectorAll('.colorBtn').forEach(b => b.classList.remove('active'));
+        }
+        
+        // History management
+        function saveState() {
+            historyStep++;
+            if (historyStep < history.length) {
+                history.length = historyStep;
+            }
+            history.push(canvas.toDataURL());
+        }
+        
+        function undo() {
+            if (historyStep > 0) {
+                historyStep--;
+                restoreState();
+            }
+        }
+        
+        function redo() {
+            if (historyStep < history.length - 1) {
+                historyStep++;
+                restoreState();
+            }
+        }
+        
+        function restoreState() {
+            const img = new Image();
+            img.src = history[historyStep];
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+        }
+        
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveState();
+        }
+        
+        function downloadImage() {
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'drawing_' + new Date().getTime() + '.jpg';
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/jpeg', 0.95);
+        }
+        
+        // Roulette
+        let rouletteItems = [];
+        let rouletteInterval = null;
+        
+        async function loadRouletteItems() {
+            try {
+                const response = await fetch('list.txt');
+                const text = await response.text();
+                rouletteItems = text.split('\n').filter(line => line.trim() !== '');
+                if (rouletteItems.length === 0) {
+                    rouletteItems = ['項目1', '項目2', '項目3', '項目4', '項目5'];
+                }
+            } catch (e) {
+                rouletteItems = ['項目1', '項目2', '項目3', '項目4', '項目5'];
+            }
+        }
+        
+        function startRoulette() {
+            if (rouletteInterval) return;
+            
+            const display = document.getElementById('rouletteDisplay');
+            const btn = document.getElementById('rouletteBtn');
+            btn.disabled = true;
+            
+            let count = 0;
+            const maxCount = 20;
+            
+            rouletteInterval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * rouletteItems.length);
+                display.textContent = rouletteItems[randomIndex];
+                count++;
+                
+                if (count >= maxCount) {
+                    clearInterval(rouletteInterval);
+                    rouletteInterval = null;
+                    btn.disabled = false;
+                }
+            }, 100);
+        }
+        
+        // Stopwatch
+        let stopwatchTime = 0;
+        let stopwatchInterval = null;
+        let isStopwatchRunning = false;
+        
+        function updateStopwatchDisplay() {
+            const minutes = Math.floor(Math.abs(stopwatchTime) / 60);
+            const seconds = Math.abs(stopwatchTime) % 60;
+            const sign = stopwatchTime < 0 ? '-' : '';
+            document.getElementById('stopwatchDisplay').textContent = 
+                sign + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        }
+        
+        function startStopwatch() {
+            if (!isStopwatchRunning) {
+                isStopwatchRunning = true;
+                stopwatchInterval = setInterval(() => {
+                    stopwatchTime++;
+                    updateStopwatchDisplay();
+                }, 1000);
+            }
+        }
+        
+        function stopStopwatch() {
+            if (isStopwatchRunning) {
+                isStopwatchRunning = false;
+                clearInterval(stopwatchInterval);
+            }
+        }
+        
+        function resetStopwatch() {
+            stopStopwatch();
+            stopwatchTime = 0;
+            updateStopwatchDisplay();
+        }
+        
+        function adjustTime(seconds) {
+            stopwatchTime += seconds;
+            if (stopwatchTime < 0) stopwatchTime = 0;
+            updateStopwatchDisplay();
+        }
+        
+        // Initialize
+        loadRouletteItems();
+        saveState();
+    </script>
+</body>
+</html>
