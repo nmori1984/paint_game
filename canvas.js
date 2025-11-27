@@ -20,9 +20,10 @@ class DrawingCanvas {
     
     initCanvas() {
         // キャンバスのサイズを親要素に合わせる
-        const container = this.canvas.parentElement;
-        this.canvas.width = container.clientWidth;
-        this.canvas.height = container.clientHeight;
+        const section = this.canvas.parentElement;
+        const padding = 10; // パディング分を考慮
+        this.canvas.width = section.clientWidth - padding;
+        this.canvas.height = section.clientHeight - padding;
         
         // 背景を白に設定
         this.ctx.fillStyle = '#ffffff';
@@ -34,8 +35,14 @@ class DrawingCanvas {
         // リサイズ時の処理
         window.addEventListener('resize', () => {
             const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            this.canvas.width = container.clientWidth;
-            this.canvas.height = container.clientHeight;
+            this.canvas.width = section.clientWidth - padding;
+            this.canvas.height = section.clientHeight - padding;
+            
+            // 背景を白に設定
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // 以前の描画内容を復元
             this.ctx.putImageData(imageData, 0, 0);
         });
     }

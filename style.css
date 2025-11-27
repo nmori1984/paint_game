@@ -8,58 +8,66 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     overflow: hidden;
+    /* Chromeのアドレスバーを隠す */
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .container {
     display: flex;
     height: 100vh;
+    height: 100dvh; /* 動的ビューポート高さ */
     width: 100vw;
 }
 
-/* 左側: 描画キャンバス (60%) */
+/* 左側: 描画キャンバスのみ (70%) */
 .canvas-section {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    background-color: #e0e0e0;
-    padding: 10px;
-}
-
-.canvas-container {
-    flex: 1;
+    width: 70%;
     background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
 }
 
 #drawingCanvas {
     display: block;
     cursor: crosshair;
     touch-action: none;
+    border: 1px solid #ccc;
 }
 
-/* ツール */
-.tools {
+/* 右側: ツール、ルーレット、タイマー (30%) */
+.control-section {
+    width: 30%;
     display: flex;
-    gap: 15px;
-    padding: 10px;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
+
+/* ツールコンテナ */
+.tools-container {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    flex-wrap: wrap;
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .color-palette {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
 }
 
 .color-btn {
-    width: 35px;
-    height: 35px;
+    width: 28px;
+    height: 28px;
     border: 2px solid transparent;
     border-radius: 50%;
     cursor: pointer;
@@ -68,7 +76,7 @@ body {
 
 .color-btn.active {
     border-color: #333;
-    transform: scale(1.2);
+    transform: scale(1.15);
 }
 
 .color-btn:hover {
@@ -77,18 +85,20 @@ body {
 
 .line-width {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     align-items: center;
+    margin-bottom: 6px;
 }
 
 .width-btn {
-    padding: 8px 15px;
+    padding: 5px 10px;
     border: 2px solid #ccc;
     background-color: white;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     transition: all 0.2s;
+    flex: 1;
 }
 
 .width-btn.active {
@@ -107,19 +117,21 @@ body {
 
 .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     flex-wrap: wrap;
 }
 
 .action-buttons button {
-    padding: 8px 15px;
+    padding: 5px 8px;
     border: none;
     background-color: #2196F3;
     color: white;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     transition: background-color 0.2s;
+    flex: 1;
+    min-width: 45px;
 }
 
 .action-buttons button:hover {
@@ -167,29 +179,29 @@ body {
 .roulette-container,
 .timer-container {
     background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .roulette-container h2,
 .timer-container h2 {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     color: #333;
-    font-size: 24px;
+    font-size: 16px;
 }
 
 .roulette-display {
     background-color: #fff3cd;
-    border: 3px solid #ffc107;
-    border-radius: 8px;
-    padding: 30px;
+    border: 2px solid #ffc107;
+    border-radius: 5px;
+    padding: 15px;
     text-align: center;
-    font-size: 28px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 15px;
-    min-height: 100px;
+    margin-bottom: 8px;
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -207,13 +219,13 @@ body {
 
 .main-btn {
     width: 100%;
-    padding: 15px;
+    padding: 10px;
     border: none;
     background-color: #ff5722;
     color: white;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     transition: background-color 0.2s;
 }
@@ -229,14 +241,14 @@ body {
 
 .edit-btn {
     width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 6px;
+    margin-top: 6px;
     border: 2px solid #9c27b0;
     background-color: white;
     color: #9c27b0;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: bold;
     transition: all 0.2s;
 }
@@ -365,32 +377,32 @@ body {
 
 .timer-display {
     background-color: #e3f2fd;
-    border: 3px solid #2196F3;
-    border-radius: 8px;
-    padding: 30px;
+    border: 2px solid #2196F3;
+    border-radius: 5px;
+    padding: 15px;
     text-align: center;
-    font-size: 48px;
+    font-size: 28px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     font-family: 'Courier New', monospace;
     color: #1976D2;
 }
 
 .timer-controls {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
 .timer-btn {
     flex: 1;
-    padding: 12px;
+    padding: 8px;
     border: none;
     background-color: #4CAF50;
     color: white;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     transition: background-color 0.2s;
 }
@@ -409,18 +421,18 @@ body {
 
 .timer-presets {
     display: flex;
-    gap: 10px;
+    gap: 6px;
 }
 
 .preset-btn {
     flex: 1;
-    padding: 10px;
+    padding: 6px;
     border: 2px solid #2196F3;
     background-color: white;
     color: #2196F3;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     transition: all 0.2s;
 }
 
@@ -431,35 +443,42 @@ body {
 
 /* スマホ横長画面対応 */
 @media screen and (max-width: 900px) {
-    .tools {
-        font-size: 12px;
-    }
-    
     .color-btn {
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
     }
     
     .action-buttons button,
     .width-btn {
-        padding: 6px 10px;
-        font-size: 12px;
+        padding: 4px 6px;
+        font-size: 10px;
     }
     
     .roulette-container h2,
     .timer-container h2 {
-        font-size: 20px;
+        font-size: 14px;
     }
     
     .roulette-display {
-        font-size: 22px;
-        padding: 20px;
-        min-height: 80px;
+        font-size: 18px;
+        padding: 12px;
+        min-height: 50px;
     }
     
     .timer-display {
-        font-size: 36px;
-        padding: 20px;
+        font-size: 24px;
+        padding: 12px;
+    }
+    
+    .main-btn,
+    .timer-btn {
+        font-size: 12px;
+        padding: 8px;
+    }
+    
+    .preset-btn {
+        font-size: 10px;
+        padding: 5px;
     }
 }
 
