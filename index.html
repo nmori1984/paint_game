@@ -2,20 +2,23 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>お絵描きゲーム</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <!-- 左側: 描画キャンバス (60%) -->
+        <!-- 左側: 描画キャンバスのみ -->
         <div class="canvas-section">
-            <div class="canvas-container">
-                <canvas id="drawingCanvas"></canvas>
-            </div>
-            
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+        
+        <!-- 右側: ツール、ルーレット、タイマー -->
+        <div class="control-section">
             <!-- 描画ツール -->
-            <div class="tools">
+            <div class="tools-container">
                 <!-- 色パレット -->
                 <div class="color-palette">
                     <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
@@ -40,14 +43,10 @@
                     <button id="eraserBtn">けしゴム</button>
                     <button id="undoBtn">もどる</button>
                     <button id="redoBtn">すすむ</button>
-                    <button id="clearBtn">ぜんぶけす</button>
+                    <button id="clearBtn">けす</button>
                     <button id="downloadBtn">ほぞん</button>
                 </div>
             </div>
-        </div>
-        
-        <!-- 右側: ルーレットとタイマー (40%) -->
-        <div class="control-section">
             <!-- お題のルーレット -->
             <div class="roulette-container">
                 <h2>おだい ルーレット</h2>
