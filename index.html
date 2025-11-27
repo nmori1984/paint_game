@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お絵描きゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 左側: 描画キャンバス (60%) -->
+        <div class="canvas-section">
+            <div class="canvas-container">
+                <canvas id="drawingCanvas"></canvas>
+            </div>
+            
+            <!-- 描画ツール -->
+            <div class="tools">
+                <!-- 色パレット -->
+                <div class="color-palette">
+                    <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
+                    <button class="color-btn" data-color="#ff0000" style="background-color: #ff0000;"></button>
+                    <button class="color-btn" data-color="#00ff00" style="background-color: #00ff00;"></button>
+                    <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;"></button>
+                    <button class="color-btn" data-color="#ffff00" style="background-color: #ffff00;"></button>
+                    <button class="color-btn" data-color="#ff00ff" style="background-color: #ff00ff;"></button>
+                    <button class="color-btn" data-color="#00ffff" style="background-color: #00ffff;"></button>
+                    <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;"></button>
+                </div>
+                
+                <!-- 線の太さ -->
+                <div class="line-width">
+                    <button class="width-btn active" data-width="2">ほそい</button>
+                    <button class="width-btn" data-width="5">ふつう</button>
+                    <button class="width-btn" data-width="10">ふとい</button>
+                </div>
+                
+                <!-- 機能ボタン -->
+                <div class="action-buttons">
+                    <button id="eraserBtn">けしゴム</button>
+                    <button id="undoBtn">もどる</button>
+                    <button id="redoBtn">すすむ</button>
+                    <button id="clearBtn">ぜんぶけす</button>
+                    <button id="downloadBtn">ほぞん</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右側: ルーレットとタイマー (40%) -->
+        <div class="control-section">
+            <!-- お題のルーレット -->
+            <div class="roulette-container">
+                <h2>おだい ルーレット</h2>
+                <div id="rouletteDisplay" class="roulette-display">???</div>
+                <button id="rouletteBtn" class="main-btn">ルーレット かいし</button>
+                <button id="editTopicsBtn" class="edit-btn">お題を編集</button>
+            </div>
+            
+            <!-- カウントダウンタイマー -->
+            <div class="timer-container">
+                <h2>タイマー</h2>
+                <div id="timerDisplay" class="timer-display">00:00.000</div>
+                <div class="timer-controls">
+                    <button id="startBtn" class="timer-btn">スタート</button>
+                    <button id="stopBtn" class="timer-btn">ストップ</button>
+                </div>
+                <div class="timer-presets">
+                    <button class="preset-btn" data-seconds="30">30びょう</button>
+                    <button class="preset-btn" data-seconds="60">60びょう</button>
+                    <button class="preset-btn" data-seconds="100">100びょう</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- お題編集モーダル -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>お題リスト編集</h2>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">1行に1つのお題を入力してください</p>
+                <textarea id="topicsTextarea" rows="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="saveTopicsBtn" class="save-btn">保存</button>
+                <button id="cancelBtn" class="cancel-btn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="canvas.js"></script>
+    <script src="roulette.js"></script>
+    <script src="timer.js"></script>
+</body>
+</html>
