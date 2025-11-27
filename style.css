@@ -43,8 +43,8 @@ body {
     width: 30%;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    padding: 5px;
+    gap: 0;
+    padding: 3px;
     background-color: #f9f9f9;
     overflow-y: auto;
 }
@@ -52,16 +52,17 @@ body {
 /* ツールコンテナ */
 .tools-container {
     background-color: white;
-    padding: 5px;
-    border-radius: 4px;
+    padding: 3px;
+    border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2px;
 }
 
 .color-palette {
     display: flex;
     gap: 3px;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     flex-wrap: wrap;
 }
 
@@ -88,7 +89,7 @@ body {
     display: flex;
     gap: 3px;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .width-btn {
@@ -118,7 +119,7 @@ body {
 
 .action-buttons {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     flex-wrap: wrap;
 }
 
@@ -181,27 +182,28 @@ body {
 .roulette-container,
 .timer-container {
     background-color: white;
-    padding: 4px;
+    padding: 3px;
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2px;
 }
 
 .roulette-display {
     background-color: #fff3cd;
     border: 1px solid #ffc107;
     border-radius: 3px;
-    padding: 4px 6px;
+    padding: 3px 5px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    margin-bottom: 3px;
-    min-height: 28px;
+    margin-bottom: 2px;
+    min-height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #333;
     word-break: break-all;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .roulette-display.spinning {
@@ -215,7 +217,7 @@ body {
 
 .roulette-buttons {
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .main-btn {
@@ -379,19 +381,19 @@ body {
     background-color: #e3f2fd;
     border: 1px solid #2196F3;
     border-radius: 3px;
-    padding: 4px 6px;
+    padding: 3px 5px;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     font-family: 'Courier New', monospace;
     color: #1976D2;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .timer-controls {
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .timer-btn {
