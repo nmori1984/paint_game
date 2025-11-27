@@ -59,19 +59,20 @@ body {
 
 .color-palette {
     display: flex;
-    gap: 4px;
+    gap: 3px;
     align-items: center;
     margin-bottom: 6px;
     flex-wrap: wrap;
 }
 
 .color-btn {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     border: 2px solid transparent;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s;
+    flex-shrink: 0;
 }
 
 .color-btn.active {
@@ -122,16 +123,17 @@ body {
 }
 
 .action-buttons button {
-    padding: 5px 8px;
+    padding: 5px 6px;
     border: none;
     background-color: #2196F3;
     color: white;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 9px;
     transition: background-color 0.2s;
     flex: 1;
-    min-width: 45px;
+    min-width: 40px;
+    white-space: nowrap;
 }
 
 .action-buttons button:hover {
@@ -188,17 +190,18 @@ body {
     background-color: #fff3cd;
     border: 1px solid #ffc107;
     border-radius: 3px;
-    padding: 8px;
+    padding: 4px 6px;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     margin-bottom: 4px;
-    min-height: 40px;
+    min-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #333;
     word-break: break-all;
+    line-height: 1.2;
 }
 
 .roulette-display.spinning {
@@ -376,13 +379,14 @@ body {
     background-color: #e3f2fd;
     border: 1px solid #2196F3;
     border-radius: 3px;
-    padding: 8px;
+    padding: 4px 6px;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
     font-family: 'Courier New', monospace;
     color: #1976D2;
+    line-height: 1.2;
 }
 
 .timer-controls {
@@ -435,40 +439,40 @@ body {
 /* スマホ横長画面対応 */
 @media screen and (max-width: 900px) {
     .color-btn {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
     
     .action-buttons button,
     .width-btn {
-        padding: 4px 5px;
-        font-size: 9px;
+        padding: 4px 4px;
+        font-size: 8px;
     }
     
     .roulette-display {
-        font-size: 14px;
-        padding: 6px;
-        min-height: 35px;
+        font-size: 12px;
+        padding: 3px 5px;
+        min-height: 24px;
     }
     
     .timer-display {
-        font-size: 18px;
-        padding: 6px;
+        font-size: 14px;
+        padding: 3px 5px;
     }
     
     .main-btn,
     .timer-btn {
-        font-size: 10px;
-        padding: 5px;
+        font-size: 9px;
+        padding: 4px;
     }
     
     .preset-btn {
-        font-size: 9px;
-        padding: 5px 2px;
+        font-size: 8px;
+        padding: 4px 2px;
     }
     
     .edit-btn {
-        font-size: 9px;
+        font-size: 8px;
     }
 }
 
