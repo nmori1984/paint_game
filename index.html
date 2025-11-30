@@ -52,8 +52,8 @@
                 <div id="personRouletteDisplay" class="roulette-display">???</div>
                 <div class="roulette-buttons">
                     <button id="personRouletteBtn" class="main-btn">おえかきするひと</button>
+                    <button id="editPersonBtn" class="edit-btn">✎</button>
                 </div>
-                <p class="roulette-desc">name.txtから担当者をランダム決定</p>
             </div>
             
             <!-- カウントダウンタイマー -->
@@ -66,7 +66,11 @@
                     <button class="preset-btn" data-seconds="20">20</button>
                     <button class="preset-btn" data-seconds="30">30</button>
                 </div>
-                <p class="timer-desc">お絵描き開始でタイマー開始、クリアでリセット</p>
+            </div>
+            
+            <!-- 管理者ツールボタン -->
+            <div class="admin-container">
+                <button id="adminToolBtn" class="admin-btn">管理者ツール</button>
             </div>
         </div>
     </div>
@@ -85,6 +89,24 @@
             <div class="modal-footer">
                 <button id="saveTopicsBtn" class="save-btn">保存</button>
                 <button id="cancelBtn" class="cancel-btn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 担当者編集モーダル -->
+    <div id="editPersonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>担当者リスト編集</h2>
+                <button id="closePersonModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">1行に1人の名前を入力してください</p>
+                <textarea id="personsTextarea" rows="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="savePersonsBtn" class="save-btn">保存</button>
+                <button id="cancelPersonBtn" class="cancel-btn">キャンセル</button>
             </div>
         </div>
     </div>
@@ -119,6 +141,47 @@
         }
         const idx = Math.floor(Math.random() * persons.length);
         document.getElementById('personRouletteDisplay').textContent = persons[idx];
+    };
+
+    // 担当者編集ボタン
+    const editPersonModal = document.getElementById('editPersonModal');
+    const editPersonBtn = document.getElementById('editPersonBtn');
+    const closePersonModal = document.getElementById('closePersonModal');
+    const cancelPersonBtn = document.getElementById('cancelPersonBtn');
+    const savePersonsBtn = document.getElementById('savePersonsBtn');
+    const personsTextarea = document.getElementById('personsTextarea');
+
+    editPersonBtn.onclick = function() {
+        personsTextarea.value = persons.join('\n');
+        editPersonModal.style.display = 'flex';
+    };
+
+    closePersonModal.onclick = function() {
+        editPersonModal.style.display = 'none';
+    };
+
+    cancelPersonBtn.onclick = function() {
+        editPersonModal.style.display = 'none';
+    };
+
+    savePersonsBtn.onclick = function() {
+        const text = personsTextarea.value;
+        persons = text.split('\n').filter(line => line.trim() !== '');
+        console.log('保存した担当者:', persons);
+        alert('担当者リストを保存しました（ブラウザのみ）');
+        editPersonModal.style.display = 'none';
+    };
+
+    // モーダル外クリックで閉じる
+    editPersonModal.onclick = function(event) {
+        if (event.target === editPersonModal) {
+            editPersonModal.style.display = 'none';
+        }
+    };
+    
+    // 管理者ツールボタン
+    document.getElementById('adminToolBtn').onclick = function() {
+        window.location.href = 'index2.html';
     };
     </script>
 </body>
