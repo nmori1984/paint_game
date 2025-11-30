@@ -1,62 +1,69 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>お絵描きゲーム</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- 左側: 描画キャンバスのみ -->
-        <div class="canvas-section">
-            <canvas id="drawingCanvas"></canvas>
-        </div>
-        
-        <!-- 右側: ツール、ルーレット、タイマー -->
-        <div class="control-section">
-            <!-- 描画ツール -->
-            <div class="tools-container">
-                <!-- 色パレット -->
-                <div class="color-palette">
-                    <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
-                    <button class="color-btn" data-color="#ff0000" style="background-color: #ff0000;"></button>
-                    <button class="color-btn" data-color="#00ff00" style="background-color: #00ff00;"></button>
-                    <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;"></button>
-                    <button class="color-btn" data-color="#ffff00" style="background-color: #ffff00;"></button>
-                    <button class="color-btn" data-color="#ff00ff" style="background-color: #ff00ff;"></button>
-                    <button class="color-btn" data-color="#00ffff" style="background-color: #00ffff;"></button>
-                    <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;"></button>
+
+    <div id="screen-wrapper" class="screen-wrapper">
+        <!-- 画面①: お絵描き＋タイマー -->
+        <div class="screen" id="screen-draw">
+            <div class="container">
+                <div class="canvas-section">
+                    <canvas id="drawingCanvas"></canvas>
                 </div>
-                
-                <!-- 線の太さ -->
-                <div class="line-width">
-                    <button class="width-btn active" data-width="2">ほそい</button>
-                    <button class="width-btn" data-width="5">ふつう</button>
-                    <button class="width-btn" data-width="10">ふとい</button>
-                </div>
-                
-                <!-- 機能ボタン -->
-                <div class="action-buttons">
-                    <button id="eraserBtn">けしゴム</button>
-                    <button id="undoBtn">もどる</button>
-                    <button id="redoBtn">すすむ</button>
-                    <button id="clearBtn">けす</button>
-                    <button id="downloadBtn">ほぞん</button>
+                <div class="control-section">
+                    <div class="tools-container">
+                        <div class="color-palette">
+                            <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
+                            <button class="color-btn" data-color="#ff0000" style="background-color: #ff0000;"></button>
+                            <button class="color-btn" data-color="#00ff00" style="background-color: #00ff00;"></button>
+                            <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;"></button>
+                            <button class="color-btn" data-color="#ffff00" style="background-color: #ffff00;"></button>
+                            <button class="color-btn" data-color="#ff00ff" style="background-color: #ff00ff;"></button>
+                            <button class="color-btn" data-color="#00ffff" style="background-color: #00ffff;"></button>
+                            <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;"></button>
+                        </div>
+                        <div class="line-width">
+                            <button class="width-btn active" data-width="2">ほそい</button>
+                            <button class="width-btn" data-width="5">ふつう</button>
+                            <button class="width-btn" data-width="10">ふとい</button>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="eraserBtn">けしゴム</button>
+                            <button id="undoBtn">もどる</button>
+                            <button id="redoBtn">すすむ</button>
+                            <button id="clearBtn">けす</button>
+                            <button id="downloadBtn">ほぞん</button>
+                        </div>
+                    </div>
+                    <div class="timer-container">
+                        <div id="timerDisplay" class="timer-display">00:00.000</div>
+                        <div class="timer-controls">
+                            <button id="startBtn" class="timer-btn">▶</button>
+                            <button id="stopBtn" class="timer-btn">■</button>
+                            <button class="preset-btn" data-seconds="30">30</button>
+                            <button class="preset-btn" data-seconds="60">60</button>
+                            <button class="preset-btn" data-seconds="100">100</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- お題のルーレット -->
+        </div>
+        <!-- 画面②: 担当者ルーレット -->
+        <div class="screen" id="screen-person">
             <div class="roulette-container">
-                <div id="rouletteDisplay" class="roulette-display">???</div>
+                <div id="personRouletteDisplay" class="roulette-display">???</div>
                 <div class="roulette-buttons">
-                    <button id="rouletteBtn" class="main-btn">ルーレット</button>
+                    <button id="personRouletteBtn" class="main-btn">担当者ルーレット</button>
+                </div>
+            </div>
+        </div>
+        <!-- 画面③: お題ルーレット -->
+        <div class="screen" id="screen-title">
+            <div class="roulette-container">
+                <div id="titleRouletteDisplay" class="roulette-display">???</div>
+                <div class="roulette-buttons">
+                    <button id="titleRouletteBtn" class="main-btn">お題ルーレット</button>
                     <button id="editTopicsBtn" class="edit-btn">編集</button>
                 </div>
             </div>
-            
-            <!-- カウントダウンタイマー -->
+        </div>
+    </div>
             <div class="timer-container">
                 <div id="timerDisplay" class="timer-display">00:00.000</div>
                 <div class="timer-controls">
@@ -91,5 +98,6 @@
     <script src="canvas.js"></script>
     <script src="roulette.js"></script>
     <script src="timer.js"></script>
+    <script src="screen_swipe.js"></script>
 </body>
 </html>
