@@ -1,3 +1,28 @@
+/* 3画面ラッパーとスワイプ切り替え用 */
+.screen-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-x;
+}
+
+.screen {
+    min-width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    overflow-y: auto;
+    background: #f0f0f0;
+}
+
+.screen-wrapper.swiping {
+    cursor: grab;
+}
+
+/* 現在の画面を表示するためのtransformはJSで制御 */
 * {
     margin: 0;
     padding: 0;
