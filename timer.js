@@ -9,11 +9,15 @@ class Timer {
         this.totalMilliseconds = 0;
         this.remainingMilliseconds = 0;
         this.intervalId = null;
+        this.blinkIntervalId = null;
         this.isRunning = false;
         this.startTime = 0;
         
         this.setupEventListeners();
-        this.updateDisplay();
+        
+        // 初期値を一番目のボタン（10秒）に設定
+        this.lastPresetSeconds = 10;
+        this.setTime(10);
     }
     
     setupEventListeners() {
@@ -34,12 +38,14 @@ class Timer {
             btn.addEventListener('click', (e) => {
                 const seconds = parseInt(e.target.dataset.seconds);
                 this.setTime(seconds);
+                window.timer.lastPresetSeconds = seconds;
             });
         });
     }
     
     setTime(seconds) {
         this.stop();
+        this.stopBlinking();
         this.totalMilliseconds = seconds * 1000;
         this.remainingMilliseconds = seconds * 1000;
         this.updateDisplay();
@@ -79,27 +85,84 @@ class Timer {
     finish() {
         this.stop();
         this.playSound();
-        alert('じかんだよ！');
+        // アラートを表示せず、タイマー表示を点滅させる
         this.remainingMilliseconds = 0;
         this.totalMilliseconds = 0;
         this.updateDisplay();
+        
+        // タイマー表示を点滅させる
+        this.startBlinking();
+        
+        // ページ背景を薄い赤に変更（複数の要素に適用）
+        document.body.style.backgroundColor = '#ffcccc';
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.backgroundColor = '#ffcccc';
+        }
+        const screens = document.querySelectorAll('.screen');
+        screens.forEach(screen => {
+            screen.style.backgroundColor = '#ffcccc';
+        });
+    }
+    
+    startBlinking() {
+        // 既に点滅中なら停止
+        if (this.blinkIntervalId) {
+            clearInterval(this.blinkIntervalId);
+        }
+        
+        let isVisible = true;
+        this.blinkIntervalId = setInterval(() => {
+            if (isVisible) {
+                this.display.style.opacity = '0.3';
+            } else {
+                this.display.style.opacity = '1';
+            }
+            isVisible = !isVisible;
+        }, 500);
+    }
+    
+    stopBlinking() {
+        if (this.blinkIntervalId) {
+            clearInterval(this.blinkIntervalId);
+            this.blinkIntervalId = null;
+            this.display.style.opacity = '1';
+        }
+        // 背景色を元に戻す
+        document.body.style.backgroundColor = '';
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.backgroundColor = '';
+        }
+        const screens = document.querySelectorAll('.screen');
+        screens.forEach(screen => {
+            screen.style.backgroundColor = '';
+        });
     }
     
     updateDisplay() {
         const totalSeconds = Math.floor(this.remainingMilliseconds / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
+        const seconds = totalSeconds;
         const milliseconds = this.remainingMilliseconds % 1000;
         
-        const displayText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+        const displayText = `${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
         this.display.textContent = displayText;
         
-        // 残り時間が少ない場合は色を変える
-        if (this.remainingMilliseconds <= 10000 && this.remainingMilliseconds > 0) {
-            this.display.style.color = '#f44336';
-            this.display.style.borderColor = '#f44336';
+        // 残り時間に応じて色を変える
+        if (this.remainingMilliseconds <= 0) {
+            // 0秒：濃い赤（点滅時）
+            this.display.style.color = '#ffffff';
+            this.display.style.backgroundColor = '#d32f2f';
+            this.display.style.borderColor = '#d32f2f';
+        } else if (this.remainingMilliseconds <= 10000) {
+            // 10秒未満：オレンジ
+            this.display.style.color = '#ff6f00';
+            this.display.style.backgroundColor = '#e3f2fd';
+            this.display.style.borderColor = '#ff6f00';
         } else {
+            // 10秒以上：青
             this.display.style.color = '#1976D2';
+            this.display.style.backgroundColor = '#e3f2fd';
             this.display.style.borderColor = '#2196F3';
         }
     }
@@ -128,5 +191,5 @@ class Timer {
     }
 }
 
-// 初期化
-const timer = new Timer();
+// 初期化（グローバルスコープに登録）
+window.timer = new Timer();

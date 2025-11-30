@@ -7,7 +7,7 @@ class DrawingCanvas {
         // 状態管理
         this.isDrawing = false;
         this.currentColor = '#000000';
-        this.currentWidth = 2;
+        this.currentWidth = 5;
         this.isEraser = false;
         
         // 履歴管理（UNDO/REDO用）
@@ -49,7 +49,13 @@ class DrawingCanvas {
     
     setupEventListeners() {
         // マウスイベント
-        this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+        this.canvas.addEventListener('mousedown', (e) => {
+            this.startDrawing(e);
+            // タイマー連携: 描画開始でタイマー開始
+            if (window.timer && !window.timer.isRunning && window.timer.remainingMilliseconds > 0) {
+                window.timer.start();
+            }
+        });
         this.canvas.addEventListener('mousemove', (e) => this.draw(e));
         this.canvas.addEventListener('mouseup', () => this.stopDrawing());
         this.canvas.addEventListener('mouseout', () => this.stopDrawing());
@@ -58,6 +64,10 @@ class DrawingCanvas {
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.startDrawing(e.touches[0]);
+            // タイマー連携: 描画開始でタイマー開始
+            if (window.timer && !window.timer.isRunning && window.timer.remainingMilliseconds > 0) {
+                window.timer.start();
+            }
         });
         this.canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
@@ -107,8 +117,19 @@ class DrawingCanvas {
         
         // 全クリア
         document.getElementById('clearBtn').addEventListener('click', () => {
-            if (confirm('全てクリアしますか?')) {
-                this.clearCanvas();
+            this.clearCanvas();
+            // タイマー連携: クリアでタイマーリセット（直前のプリセット秒数で）
+            if (window.timer) {
+                window.timer.stop();
+                // 直前のプリセット秒数を記憶
+                if (!window.timer.lastPresetSeconds) {
+                    // 初期値（30秒）
+                    window.timer.lastPresetSeconds = 30;
+                }
+                window.timer.setTime(window.timer.lastPresetSeconds);
+            }
+            if (window.timer) {
+                window.timer.updateDisplay(); // 表示も必ずリセット
             }
         });
         

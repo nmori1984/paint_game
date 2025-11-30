@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お題ルーレット</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="screen" id="screen-title">
+        <div class="roulette-container">
+            <div id="titleRouletteDisplay" class="roulette-display">???</div>
+            <div class="roulette-buttons">
+                <button id="titleRouletteBtn" class="main-btn">お題ルーレット</button>
+            </div>
+        </div>
+    </div>
+    <script src="roulette.js"></script>
+    <script>
+    // お題ルーレット用のJS
+    async function fetchTitles() {
+        const response = await fetch('title.txt');
+        const text = await response.text();
+        return text.split('\n').filter(Boolean);
+    }
+    let titles = [];
+    fetchTitles().then(list => { titles = list; });
+    document.getElementById('titleRouletteBtn').onclick = function() {
+        if (titles.length === 0) return;
+        const idx = Math.floor(Math.random() * titles.length);
+        document.getElementById('titleRouletteDisplay').textContent = titles[idx];
+    };
+    </script>
+</body>
+</html>
