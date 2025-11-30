@@ -1,0 +1,501 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    /* Chromeのアドレスバーを隠す */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    height: 100dvh; /* 動的ビューポート高さ */
+    width: 100vw;
+}
+
+/* 左側: 描画キャンバスのみ (70%) */
+.canvas-section {
+    width: 70%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+#drawingCanvas {
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+    border: 1px solid #ccc;
+}
+
+/* 右側: ツール、ルーレット、タイマー (30%) */
+.control-section {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 3px;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
+
+/* ツールコンテナ */
+.tools-container {
+    background-color: white;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2px;
+}
+
+.color-palette {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin-bottom: 2px;
+    flex-wrap: wrap;
+}
+
+.color-btn {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.color-btn.active {
+    border-color: #333;
+    transform: scale(1.15);
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.line-width {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.width-btn {
+    padding: 5px 10px;
+    border: 2px solid #ccc;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+    flex: 1;
+}
+
+.width-btn.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.width-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.width-btn.active:hover {
+    background-color: #45a049;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.action-buttons button {
+    padding: 5px 6px;
+    border: none;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 9px;
+    transition: background-color 0.2s;
+    flex: 1;
+    min-width: 40px;
+    white-space: nowrap;
+}
+
+.action-buttons button:hover {
+    background-color: #0b7dda;
+}
+
+#eraserBtn {
+    background-color: #ff9800;
+}
+
+#eraserBtn:hover {
+    background-color: #e68900;
+}
+
+#eraserBtn.active {
+    background-color: #f57c00;
+}
+
+#clearBtn {
+    background-color: #f44336;
+}
+
+#clearBtn:hover {
+    background-color: #da190b;
+}
+
+#downloadBtn {
+    background-color: #4CAF50;
+}
+
+#downloadBtn:hover {
+    background-color: #45a049;
+}
+
+/* 右側: ルーレットとタイマー (40%) */
+.control-section {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.roulette-container,
+.timer-container {
+    background-color: white;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2px;
+}
+
+.roulette-display {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 3px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    word-break: break-all;
+    line-height: 1.1;
+}
+
+.roulette-display.spinning {
+    animation: spin-text 0.1s infinite;
+}
+
+@keyframes spin-text {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.roulette-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+.main-btn {
+    flex: 2;
+    padding: 6px;
+    border: none;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.main-btn:hover {
+    background-color: #e64a19;
+}
+
+.main-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.edit-btn {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #9c27b0;
+    background-color: white;
+    color: #9c27b0;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.edit-btn:hover {
+    background-color: #9c27b0;
+    color: white;
+}
+
+/* モーダルウィンドウ */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-instruction {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+#topicsTextarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+#topicsTextarea:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.save-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #45a049;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #da190b;
+}
+
+.timer-display {
+    background-color: #e3f2fd;
+    border: 1px solid #2196F3;
+    border-radius: 3px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    font-family: 'Courier New', monospace;
+    color: #1976D2;
+    line-height: 1.1;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.timer-btn {
+    flex: 1;
+    padding: 6px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.timer-btn:hover {
+    background-color: #45a049;
+}
+
+#stopBtn {
+    background-color: #f44336;
+}
+
+#stopBtn:hover {
+    background-color: #da190b;
+}
+
+.preset-btn {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #2196F3;
+    background-color: white;
+    color: #2196F3;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.preset-btn:hover {
+    background-color: #2196F3;
+    color: white;
+}
+
+/* スマホ横長画面対応 */
+@media screen and (max-width: 900px) {
+    .color-btn {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .action-buttons button,
+    .width-btn {
+        padding: 4px 4px;
+        font-size: 8px;
+    }
+    
+    .roulette-display {
+        font-size: 12px;
+        padding: 3px 5px;
+        min-height: 24px;
+    }
+    
+    .timer-display {
+        font-size: 14px;
+        padding: 3px 5px;
+    }
+    
+    .main-btn,
+    .timer-btn {
+        font-size: 9px;
+        padding: 4px;
+    }
+    
+    .preset-btn {
+        font-size: 8px;
+        padding: 4px 2px;
+    }
+    
+    .edit-btn {
+        font-size: 8px;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .canvas-section {
+        width: 100%;
+        height: 60%;
+    }
+    
+    .control-section {
+        width: 100%;
+        height: 40%;
+        flex-direction: row;
+    }
+    
+    .roulette-container,
+    .timer-container {
+        flex: 1;
+    }
+}

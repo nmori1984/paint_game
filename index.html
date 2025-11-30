@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>お絵描きゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 左側: 描画キャンバスのみ -->
+        <div class="canvas-section">
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+        
+        <!-- 右側: ツール、ルーレット、タイマー -->
+        <div class="control-section">
+            <!-- 描画ツール -->
+            <div class="tools-container">
+                <!-- 色パレット -->
+                <div class="color-palette">
+                    <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
+                    <button class="color-btn" data-color="#ff0000" style="background-color: #ff0000;"></button>
+                    <button class="color-btn" data-color="#00ff00" style="background-color: #00ff00;"></button>
+                    <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;"></button>
+                    <button class="color-btn" data-color="#ffff00" style="background-color: #ffff00;"></button>
+                    <button class="color-btn" data-color="#ff00ff" style="background-color: #ff00ff;"></button>
+                    <button class="color-btn" data-color="#00ffff" style="background-color: #00ffff;"></button>
+                    <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;"></button>
+                </div>
+                
+                <!-- 線の太さ -->
+                <div class="line-width">
+                    <button class="width-btn" data-width="2">ほそい</button>
+                    <button class="width-btn active" data-width="5">ふつう</button>
+                    <button class="width-btn" data-width="10">ふとい</button>
+                </div>
+                
+                <!-- 機能ボタン -->
+                <div class="action-buttons">
+                    <button id="clearBtn">ぜんぶけす</button>
+                    <button id="eraserBtn">けしゴム</button>
+                    <button id="undoBtn">もどる</button>
+                    <button id="redoBtn">すすむ</button>
+                    <button id="downloadBtn">ほぞん</button>
+                </div>
+            </div>
+            <!-- 担当者ルーレット -->
+            <div class="roulette-container">
+                <div id="personRouletteDisplay" class="roulette-display">???</div>
+                <div class="roulette-buttons">
+                    <button id="personRouletteBtn" class="main-btn">おえかきするひと</button>
+                </div>
+                <p class="roulette-desc">name.txtから担当者をランダム決定</p>
+            </div>
+            
+            <!-- カウントダウンタイマー -->
+            <div class="timer-container">
+                <div id="timerDisplay" class="timer-display">00.000</div>
+                <div class="timer-controls">
+                    <button id="startBtn" class="timer-btn">▶</button>
+                    <button id="stopBtn" class="timer-btn">■</button>
+                    <button class="preset-btn" data-seconds="10">10</button>
+                    <button class="preset-btn" data-seconds="20">20</button>
+                    <button class="preset-btn" data-seconds="30">30</button>
+                </div>
+                <p class="timer-desc">お絵描き開始でタイマー開始、クリアでリセット</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- お題編集モーダル -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>お題リスト編集</h2>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">1行に1つのお題を入力してください</p>
+                <textarea id="topicsTextarea" rows="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="saveTopicsBtn" class="save-btn">保存</button>
+                <button id="cancelBtn" class="cancel-btn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="canvas.js"></script>
+    <script src="roulette.js"></script>
+    <script src="timer.js"></script>
+    <script>
+    // 担当者ルーレット
+    async function fetchPersons() {
+        try {
+            const response = await fetch('name.txt');
+            if (!response.ok) {
+                throw new Error('name.txtの読み込みに失敗しました');
+            }
+            const text = await response.text();
+            return text.split('\n').filter(line => line.trim() !== '');
+        } catch (error) {
+            console.error('エラー:', error);
+            return [];
+        }
+    }
+    let persons = [];
+    fetchPersons().then(list => { 
+        persons = list;
+        console.log('読み込んだ担当者:', persons);
+    });
+    document.getElementById('personRouletteBtn').onclick = function() {
+        if (persons.length === 0) {
+            document.getElementById('personRouletteDisplay').textContent = 'エラー';
+            return;
+        }
+        const idx = Math.floor(Math.random() * persons.length);
+        document.getElementById('personRouletteDisplay').textContent = persons[idx];
+    };
+    </script>
+</body>
+</html>
